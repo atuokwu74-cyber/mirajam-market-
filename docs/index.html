@@ -1751,106 +1751,96 @@ function renderBasket(){
   });
 
 }
-
-
 function placeOrder(){
 
   if(cart.length === 0){
-
     showToast("Your basket is empty");
-
     return;
-
   }
 
-  const name =
-    document.getElementById("customerName")
-    .value.trim();
-
-  const phone =
-    document.getElementById("customerPhone")
-    .value.trim();
-
-  const address =
-    document.getElementById("address")
-    .value.trim();
-
-  const area =
-    document.getElementById("deliveryArea")
-    .value;
-
-  const payment =
-    document.getElementById("paymentMethod")
-    .value;
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const area = document.getElementById("deliveryArea").value;
+  const payment = document.getElementById("paymentMethod").value;
 
   if(!name || !phone || !address || !area){
-
     showToast("Please complete all delivery details");
-
     return;
-
   }
 
+  const total = getCartTotal();
+
   const order = {
-
-    id:
-      "MIR-" +
-      Date.now()
-      .toString()
-      .slice(-8),
-
-    date:
-      new Date().toLocaleString("en-NG"),
-
-    customerName:name,
-
-    phone:phone,
-
-    address:address,
-
-    area:area,
-
-    payment:payment,
-
-    status:"Order received",
-
-    total:getCartTotal(),
-
-    items:cart.map(item => ({
-
-      name:item.name,
-
-      unit:item.unit,
-
-      quantity:item.quantity,
-
-      price:item.price
-
+    id: "MIR-" + Date.now().toString().slice(-8),
+    date: new Date().toLocaleString("en-NG"),
+    customerName: name,
+    phone: phone,
+    address: address,
+    area: area,
+    payment: payment,
+    status: "Order received",
+    total: total,
+    items: cart.map(item => ({
+      name: item.name,
+      unit: item.unit,
+      quantity: item.quantity,
+      price: item.price
     }))
-
   };
 
   orders.unshift(order);
-
   saveOrders();
 
+  let message =
+    "🛒 *NEW MIRAJAM MARKET ORDER*%0A%0A" +
+    "📋 Order: " + encodeURIComponent(order.id) + "%0A" +
+    "👤 Customer: " + encodeURIComponent(name) + "%0A" +
+    "📞 Phone: " + encodeURIComponent(phone) + "%0A" +
+    "📍 Area: " + encodeURIComponent(area) + "%0A" +
+    "🏠 Address: " + encodeURIComponent(address) + "%0A" +
+    "💳 Payment: " + encodeURIComponent(payment) + "%0A%0A" +
+    "🛍️ *ITEMS*%0A";
+
+  order.items.forEach(item => {
+
+    message +=
+      encodeURIComponent(
+        item.quantity + " × " +
+        item.name + " (" +
+        item.unit + ") - ₦" +
+        Number(item.price * item.quantity).toLocaleString("en-NG")
+      ) + "%0A";
+
+  });
+
+  message +=
+    "%0A💰 *TOTAL: ₦" +
+    Number(total).toLocaleString("en-NG") +
+    "*%0A%0A" +
+    "Please confirm this order.";
+
+  /* YOUR MIRAJAM WHATSAPP NUMBER */
+  const myWhatsAppNumber = "2348126641363";
+
+  const whatsappURL =
+    "https://wa.me/" +
+    myWhatsAppNumber +
+    "?text=" +
+    message;
+
   cart = [];
-
   saveCart();
-
   updateCartCount();
 
   document.getElementById("customerName").value = "";
-
   document.getElementById("customerPhone").value = "";
-
   document.getElementById("address").value = "";
-
   document.getElementById("deliveryArea").value = "";
 
-  showPage("orders");
+  window.location.href = whatsappURL;
+}
 
-  showToast("Order placed successfully");
 
 }
 
