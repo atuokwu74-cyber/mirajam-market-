@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIRAJAM Market</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7f5;
+  color: #222;
+  padding-bottom: 80px;
+}
+
+header {
+  background: #087f23;
+  color: white;
+  padding: 20px 15px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+header p {
+  margin: 6px 0 15px;
+  font-size: 14px;
+}
+
+.search {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.search input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  padding: 14px;
+}
+
+.search button {
+  border: 0;
+  background: #ffb000;
+  padding: 0 17px;
+}
+
+.container {
+  padding: 15px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.notice {
+  background: #fff3cd;
+  padding: 12px;
+  border-radius: 9px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.categories {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 15px 0;
+  padding-bottom: 3px;
+}
+
+.categories button {
+  white-space: nowrap;
+  padding: 9px 14px;
+  border: 1px solid #087f23;
+  border-radius: 20px;
+  background: white;
+  color: #087f23;
+}
+
+.categories button.active {
+  background: #087f23;
+  color: white;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.pic {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef1ee;
+  border-radius: 9px;
+  font-size: 48px;
+}
+
+.card h3 {
+  margin: 10px 0 5px;
+  font-size: 16px;
+}
+
+.unit {
+  color: #777;
+  font-size: 13px;
+  min-height: 30px;
+}
+
+.price {
+  color: #087f23;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.card button,
+.checkout-btn {
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 8px;
+  background: #087f23;
+  color: white;
+  font-weight: bold;
+}
+
+.card button:active,
+.checkout-btn:active {
+  transform: scale(.96);
+}
+
+.basket-item,
+.order-card {
+  background: white;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.qty button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: #087f23;
+  color: white;
+  font-size: 18px;
+}
+
+.remove {
+  margin-left: auto;
+  background: #d62828 !important;
+  width: auto !important;
+  padding: 7px 10px !important;
+  font-size: 12px !important;
+}
+
+.form {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 10px;
+  color: #777;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 10px #0002;
+  z-index: 100;
+}
+
+.bottom button {
+  border: 0;
+  background: none;
+  color: #555;
+  font-size: 12px;
+}
+
+.bottom span {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 3px;
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 85px;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  display: none;
+  z-index: 200;
+  font-size: 14px;
+}
+
+@media (min-width: 700px) {
+  .products {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🛒 MIRAJAM Market</h1>
+
+<p>The physical market in a digital world.</p>
+
+<div class="search">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Search for anything..."
+oninput="searchProducts()">
+
+<button type="button" onclick="searchProducts()">🔍</button>
+
+</div>
+
+</header>
+
+
+<div class="container">
+
+
+<section id="home" class="section active">
+
+<div class="notice">
+🛍️ MIRAJAM goes to the physical market, buys your items, checks them and arranges delivery.
+</div>
+
+<h2>Shop the Market</h2>
+
+<div class="categories">
+
+<button class="active" onclick="filterCategory('All',this)">
+All
+</button>
+
+<button onclick="filterCategory('Fresh Food',this)">
+Fresh Food
+</button>
+
+<button onclick="filterCategory('Meat',this)">
+Meat
+</button>
+
+<button onclick="filterCategory('Fish',this)">
+Fish
+</button>
+
+<button onclick="filterCategory('Grains',this)">
+Grains
+</button>
+
+<button onclick="filterCategory('Spices',this)">
+Spices
+</button>
+
+<button onclick="filterCategory('Fruits',this)">
+Fruits
+</button>
+
+<button onclick="filterCategory('Household',this)">
+Household
+</button>
+
+</div>
+
+<div id="products" class="products"></div>
+
+</section>
+
+
+<section id="basket" class="section">
+
+<h2>🛒 My Basket</h2>
+
+<br>
+
+<div id="basketItems"></div>
+
+<button class="checkout-btn" onclick="showCheckout()">
+Proceed to Checkout
+</button>
+
+</section>
+
+
+<section id="checkout" class="section">
+
+<h2>Checkout</h2>
+
+<br>
+
+<div class="form">
+
+<input
+id="name"
+placeholder="Full name">
+
+<input
+id="phone"
+placeholder="Phone number">
+
+<textarea
+id="address"
+rows="3"
+placeholder="Delivery address"></textarea>
+
+<textarea
+id="notes"
+rows="3"
+placeholder="Special instructions (optional)"></textarea>
+
+<button class="checkout-btn" onclick="placeOrder()">
+Place Order
+</button>
+
+</div>
+
+</section>
+
+
+<section id="orders" class="section">
+
+<h2>📦 My Orders</h2>
+
+<br>
+
+<div id="ordersList"></div>
+
+</section>
+
+
+<section id="account" class="section">
+
+<h2>👤 Account</h2>
+
+<br>
+
+<div class="form">
+
+<h3>MIRAJAM Market</h3>
+
+<p>Your market, brought to you.</p>
+
+<p>📍 Abuja</p>
+
+<p>🚚 Picking and delivery available</p>
+
+</div>
+
+</section>
+
+</div>
+
+
+<div class="bottom">
+
+<button onclick="showSection('home')">
+<span>🏠</span>
+Home
+</button>
+
+<button onclick="focusSearch()">
+<span>🔍</span>
+Search
+</button>
+
+<button onclick="showSection('basket')">
+<span>🛒</span>
+Basket <b id="basketCount">0</b>
+</button>
+
+<button onclick="showSection('orders')">
+<span>📦</span>
+Orders
+</button>
+
+<button onclick="showSection('account')">
+<span>👤</span>
+Account
+</button>
+
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+const products = [
+
+{
+id: 1,
+name: "Tomatoes",
+unit: "Mud / Basket",
+cat: "Fresh Food",
+icon: "🍅"
+},
+
+{
+id: 2,
+name: "Onions",
+unit: "Mud / Basket",
+cat: "Fresh Food",
+icon: "🧅"
+},
+
+{
+id: 3,
+name: "Fresh Pepper",
+unit: "Mud / Basket",
+cat: "Fresh Food",
+icon: "🌶️"
+},
+
+{
+id: 4,
+name: "Crayfish",
+unit: "Mud",
+cat: "Fish",
+icon: "🦐"
+},
+
+{
+id: 5,
+name: "Beef",
+unit: "Kg",
+cat: "Meat",
+icon: "🥩"
+},
+
+{
+id: 6,
+name: "Fresh Fish",
+unit: "Kg / Piece",
+cat: "Fish",
+icon: "🐟"
+},
+
+{
+id: 7,
+name: "Rice",
+unit: "Paint / Mud / Bag",
+cat: "Grains",
+icon: "🍚"
+},
+
+{
+id: 8,
+name: "Beans",
+unit: "Paint / Mud / Bag",
+cat: "Grains",
+icon: "🫘"
+},
+
+{
+id: 9,
+name: "Plantain",
+unit: "Bunch / Piece",
+cat: "Fruits",
+icon: "🍌"
+},
+
+{
+id: 10,
+name: "Eggs",
+unit: "Piece / Dozen / Crate",
+cat: "Fresh Food",
+icon: "🥚"
+},
+
+{
+id: 11,
+name: "Yam",
+unit: "Piece / Tuber",
+cat: "Fresh Food",
+icon: "🥔"
+},
+
+{
+id: 12,
+name: "Palm Oil",
+unit: "Bottle / Litre / Gallon",
+cat: "Household",
+icon: "🫙"
+},
+
+{
+id: 13,
+name: "Maggi Seasoning Cubes",
+unit: "Pack / Sachet",
+cat: "Spices",
+icon: "🧂"
+},
+
+{
+id: 14,
+name: "Curry Powder",
+unit: "Sachet / Bottle",
+cat: "Spices",
+icon: "🌿"
+},
+
+{
+id: 15,
+name: "Thyme",
+unit: "Sachet / Bottle",
+cat: "Spices",
+icon: "🌿"
+},
+
+{
+id: 16,
+name: "Salt",
+unit: "Sachet / Pack / Bag",
+cat: "Spices",
+icon: "🧂"
+},
+
+{
+id: 17,
+name: "Sugar",
+unit: "Paint / Kg / Bag",
+cat: "Spices",
+icon: "🍚"
+},
+
+{
+id: 18,
+name: "Dry Pepper",
+unit: "Mud / Bottle",
+cat: "Spices",
+icon: "🌶️"
+},
+
+{
+id: 19,
+name: "Ginger",
+unit: "Mud / Kg",
+cat: "Spices",
+icon: "🫚"
+},
+
+{
+id: 20,
+name: "Garlic",
+unit: "Mud / Kg",
+cat: "Spices",
+icon: "🧄"
+},
+
+{
+id: 21,
+name: "Stockfish",
+unit: "Piece / Kg",
+cat: "Fish",
+icon: "🐟"
+},
+
+{
+id: 22,
+name: "Dried Fish",
+unit: "Piece / Mud",
+cat: "Fish",
+icon: "🐟"
+},
+
+{
+id: 23,
+name: "Vegetables",
+unit: "Bunch / Basket",
+cat: "Fresh Food",
+icon: "🥬"
+},
+
+{
+id: 24,
+name: "Potatoes",
+unit: "Mud / Bag",
+cat: "Fresh Food",
+icon: "🥔"
+}
+
+];
+
+
+let basket =
+JSON.parse(localStorage.getItem("mirajamBasket") || "[]");
+
+let currentCategory = "All";
+
+
+function displayProducts(list = products) {
+
+const box = document.getElementById("products");
+
+if (list.length === 0) {
+
+box.innerHTML =
+'<div class="empty">No product found.</div>';
+
+return;
+
+}
+
+box.innerHTML = list.map(function(p) {
+
+return `
+
+<div class="card">
+
+<div class="pic">${p.icon}</div>
+
+<h3>${p.name}</h3>
+
+<div class="unit">${p.unit}</div>
+
+<div class="price">Market price</div>
+
+<button
+type="button"
+onclick="addToBasket(${p.id})">
+
+Add to Basket
+
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+function toast(message) {
+
+const box =
+document.getElementById("toast");
+
+box.textContent = message;
+
+box.style.display = "block";
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer =
+setTimeout(function() {
+
+box.style.display = "none";
+
+}, 1800);
+
+}
+
+
+function addToBasket(id) {
+
+const item =
+basket.find(function(x) {
+
+return x.id === id;
+
+});
+
+if (item) {
+
+item.qty++;
+
+} else {
+
+basket.push({
+id: id,
+qty: 1
+});
+
+}
+
+saveBasket();
+
+toast("Added to basket 🛒");
+
+}
+
+
+function saveBasket() {
+
+localStorage.setItem(
+"mirajamBasket",
+JSON.stringify(basket)
+);
+
+document.getElementById("basketCount").textContent =
+basket.reduce(function(total, item) {
+
+return total + item.qty;
+
+}, 0);
+
+displayBasket();
+
+}
+
+
+function displayBasket() {
+
+const box =
+document.getElementById("basketItems");
+
+if (basket.length === 0) {
+
+box.innerHTML =
+'<div class="empty">Your basket is empty.</div>';
+
+return;
+
+}
+
+box.innerHTML = basket.map(function(item) {
+
+const p =
+products.find(function(x) {
+
+return x.id === item.id;
+
+});
+
+return `
+
+<div class="basket-item">
+
+<b>${p.icon} ${p.name}</b>
+
+<p>${p.unit}</p>
+
+<div class="qty">
+
+<button
+type="button"
+onclick="changeQty(${p.id},-1)">
+−
+</button>
+
+<b>${item.qty}</b>
+
+<button
+type="button"
+onclick="changeQty(${p.id},1)">
++
+</button>
+
+<button
+class="remove"
+type="button"
+onclick="removeItem(${p.id})">
+Remove
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+function changeQty(id, change) {
+
+const item =
+basket.find(function(x) {
+
+return x.id === id;
+
+});
+
+if (!item) return;
+
+item.qty += change;
+
+if (item.qty <= 0) {
+
+basket =
+basket.filter(function(x) {
+
+return x.id !== id;
+
+});
+
+}
+
+saveBasket();
+
+}
+
+
+function removeItem(id) {
+
+basket =
+basket.filter(function(x) {
+
+return x.id !== id;
+
+});
+
+saveBasket();
+
+toast("Item removed");
+
+}
+
+
+function filterCategory(category, button) {
+
+currentCategory = category;
+
+document
+.querySelectorAll(".categories button")
+.forEach(function(b) {
+
+b.classList.remove("active");
+
+});
+
+button.classList.add("active");
+
+let result;
+
+if (category === "All") {
+
+result = products;
+
+} else {
+
+result =
+products.filter(function(p) {
+
+return p.cat === category;
+
+});
+
+}
+
+displayProducts(result);
+
+}
+
+
+function searchProducts() {
+
+const word =
+document.getElementById("searchInput")
+.value
+.toLowerCase()
+.trim();
+
+let result =
+products.filter(function(p) {
+
+return p.name.toLowerCase().includes(word) ||
+p.cat.toLowerCase().includes(word);
+
+});
+
+if (currentCategory !== "All") {
+
+result =
+result.filter(function(p) {
+
+return p.cat === currentCategory;
+
+});
+
+}
+
+displayProducts(result);
+
+}
+
+
+function showSection(id) {
+
+document
+.querySelectorAll(".section")
+.forEach(function(section) {
+
+section.classList.remove("active");
+
+});
+
+document
+.getElementById(id)
+.classList.add("active");
+
+if (id === "basket") {
+
+displayBasket();
+
+}
+
+if (id === "orders") {
+
+displayOrders();
+
+}
+
+window.scrollTo(0, 0);
+
+}
+
+
+function focusSearch() {
+
+showSection("home");
+
+setTimeout(function() {
+
+document
+.getElementById("searchInput")
+.focus();
+
+}, 100);
+
+}
+
+
+function showCheckout() {
+
+if (basket.length === 0) {
+
+toast("Your basket is empty");
+
+return;
+
+}
+
+showSection("checkout");
+
+}
+
+
+function placeOrder() {
+
+const name =
+document.getElementById("name")
+.value
+.trim();
+
+const phone =
+document.getElementById("phone")
+.value
+.trim();
+
+const address =
+document.getElementById("address")
+.value
+.trim();
+
+const notes =
+document.getElementById("notes")
+.value
+.trim();
+
+
+if (!name || !phone || !address) {
+
+toast("Please fill in your details");
+
+return;
+
+}
+
+
+const orders =
+JSON.parse(
+localStorage.getItem("mirajamOrders") || "[]"
+);
+
+
+orders.unshift({
+
+number: "MIR-" + Date.now(),
+
+name: name,
+
+phone: phone,
+
+address: address,
+
+notes: notes,
+
+items: basket,
+
+status: "Order received",
+
+date: new Date().toLocaleString()
+
+});
+
+
+localStorage.setItem(
+"mirajamOrders",
+JSON.stringify(orders)
+);
+
+
+basket = [];
+
+saveBasket();
+
+
+document.getElementById("name").value = "";
+document.getElementById("phone").value = "";
+document.getElementById("address").value = "";
+document.getElementById("notes").value = "";
+
+
+toast("Order received 🎉");
+
+showSection("orders");
+
+}
+
+
+function displayOrders() {
+
+const box =
+document.getElementById("ordersList");
+
+const orders =
+JSON.parse(
+localStorage.getItem("mirajamOrders") || "[]"
+);
+
+
+if (orders.length === 0) {
+
+box.innerHTML =
+'<div class="empty">You have no orders yet.</div>';
+
+return;
+
+}
+
+
+box.innerHTML = orders.map(function(order) {
+
+return `
+
+<div class="order-card">
+
+<b>Order ${order.number}</b>
+
+<p>${order.date}</p>
+
+<p>
+Status:
+<b style="color:#087f23">
+${order.status}
+</b>
+</p>
+
+<p>
+Delivery: ${order.address}
+</p>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+displayProducts();
+
+saveBasket();
+
+</script>
+
+</body>
+</html>
