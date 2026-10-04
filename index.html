@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIRAJAM Market</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#17201c}
+header{background:#087f5b;color:white;padding:22px 16px 25px}
+.logo{font-size:24px;font-weight:bold}
+.tagline{font-size:13px;margin-top:5px}
+.search{background:white;color:#777;border-radius:12px;padding:15px;margin-top:18px}
+main{padding:18px 15px 90px;max-width:900px;margin:auto}
+h2{font-size:19px;margin:20px 0 12px}
+.categories{display:flex;gap:10px;overflow-x:auto}
+.category{background:white;border:1px solid #ddd;border-radius:12px;padding:12px;white-space:nowrap}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.product{background:white;border-radius:14px;padding:14px;border:1px solid #e2e6e4}
+.emoji{font-size:38px}
+.name{font-weight:bold;margin-top:8px}
+.unit{font-size:12px;color:#777;margin-top:5px}
+button{width:100%;border:0;background:#087f5b;color:white;padding:11px;border-radius:9px;margin-top:10px;font-weight:bold}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px 3px}
+nav div{text-align:center;font-size:12px}
+@media(min-width:700px){.products{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">MIRAJAM MARKET</div>
+<div class="tagline">The physical market in a digital world.</div>
+<div class="search">🔎 What are you looking for?</div>
+</header>
+
+<main>
+
+<h2>Shop by category</h2>
+
+<div class="categories">
+<div class="category">🥬 Fresh Food</div>
+<div class="category">🥩 Meat</div>
+<div class="category">🐟 Fish</div>
+<div class="category">🌾 Grains</div>
+<div class="category">👕 Fashion</div>
+<div class="category">🏠 Household</div>
+</div>
+
+<h2>Popular market items</h2>
+
+<div class="products">
+
+<div class="product">
+<div class="emoji">🍅</div>
+<div class="name">Tomatoes</div>
+<div class="unit">1 Mud</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🧅</div>
+<div class="name">Onions</div>
+<div class="unit">1 Mud</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🌶️</div>
+<div class="name">Fresh Pepper</div>
+<div class="unit">1 Mud</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🍚</div>
+<div class="name">Rice</div>
+<div class="unit">1 Paint</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🥩</div>
+<div class="name">Beef</div>
+<div class="unit">1 kg</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🐟</div>
+<div class="name">Fish</div>
+<div class="unit">1 kg</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🍌</div>
+<div class="name">Plantain</div>
+<div class="unit">1 Bunch</div>
+<button>Add to Basket</button>
+</div>
+
+<div class="product">
+<div class="emoji">🥚</div>
+<div class="name">Eggs</div>
+<div class="unit">1 Crate</div>
+<button>Add to Basket</button>
+</div>
+
+</div>
+</main>
+
+<nav>
+<div>🏠<br>Home</div>
+<div>🔎<br>Search</div>
+<div>🛒<br>Basket</div>
+<div>📦<br>Orders</div>
+<div>👤<br>Account</div>
+</nav>
+
+</body>
+</html>
