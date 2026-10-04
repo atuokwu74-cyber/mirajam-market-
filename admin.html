@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIRAJAM Market - Owner Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+
+    .order {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .order h3 {
+      margin-top: 0;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .address {
+      background: #f0f7ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .refresh {
+      background: #111;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>MIRAJAM Market</h1>
+  <p>Owner Dashboard</p>
+</header>
+
+<div class="container">
+
+  <button class="refresh" onclick="loadOrders()">🔄 Refresh Orders</button>
+
+  <div id="orders">
+    <div class="empty">Loading orders...</div>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = "https://zqvvtsvzlpcupasdyiju.supabase.co;
+  const SUPABASE_KEY = "sb_publishable_nLyErKt0ppCTZ-qcCeVRkA_adSD1kMj";
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  async function loadOrders() {
+    const ordersDiv = document.getElementById("orders");
+
+    ordersDiv.innerHTML = '<div class="empty">Loading orders...</div>';
+
+    const { data, error } = await supabaseClient
+      .from("orders")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if (error) {
+      ordersDiv.innerHTML =
+        '<div class="empty">Error loading orders: ' +
+        error.message +
+        '</div>';
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      ordersDiv.innerHTML =
+        '<div class="empty">No orders yet.</div>';
+      return;
+    }
+
+    ordersDiv.innerHTML = "";
+
+    data.forEach(order => {
+      const div = document.createElement("div");
+      div.className = "order";
+
+      div.innerHTML = `
+        <h3>📦 Order #${order.id}</h3>
+
+        <p>
+          <span class="label">Customer:</span>
+          ${order.customer_name || "Not provided"}
+        </p>
+
+        <p>
+          <span class="label">Phone:</span>
+          ${order.phone || "Not provided"}
+        </p>
+
+        <div class="address">
+          <span class="label">📍 Delivery Address:</span><br>
+          ${order.address || "No address provided"}
+        </div>
+
+        <p>
+          <span class="label">🛒 Items:</span><br>
+          ${typeof order.items === "object"
+            ? JSON.stringify(order.items)
+            : order.items || "No items"}
+        </p>
+
+        <p>
+          <span class="label">💰 Total:</span>
+          ₦${Number(order.total || 0).toLocaleString()}
+        </p>
+
+        <p>
+          <span class="label">📌 Status:</span>
+          ${order.status || "New"}
+        </p>
+      `;
+
+      ordersDiv.appendChild(div);
+    });
+  }
+
+  loadOrders();
+</script>
+
+</body>
+</html>
