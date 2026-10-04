@@ -4,25 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MIRAJAM Market</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#17201c}
-header{background:#087f5b;color:white;padding:22px 16px 25px}
+header{background:#087f5b;color:white;padding:20px 15px}
 .logo{font-size:24px;font-weight:bold}
 .tagline{font-size:13px;margin-top:5px}
-.search{background:white;color:#777;border-radius:12px;padding:15px;margin-top:18px}
+.search{margin-top:16px}
+.search input{width:100%;padding:14px;border:0;border-radius:12px;font-size:15px}
 main{padding:18px 15px 90px;max-width:900px;margin:auto}
 h2{font-size:19px;margin:20px 0 12px}
-.categories{display:flex;gap:10px;overflow-x:auto}
-.category{background:white;border:1px solid #ddd;border-radius:12px;padding:12px;white-space:nowrap}
+.categories{display:flex;gap:9px;overflow-x:auto}
+.category{background:white;border:1px solid #ddd;border-radius:12px;padding:11px 13px;white-space:nowrap}
 .products{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.product{background:white;border-radius:14px;padding:14px;border:1px solid #e2e6e4}
+.product{background:white;border:1px solid #e1e5e3;border-radius:14px;padding:14px}
 .emoji{font-size:38px}
-.name{font-weight:bold;margin-top:8px}
-.unit{font-size:12px;color:#777;margin-top:5px}
-button{width:100%;border:0;background:#087f5b;color:white;padding:11px;border-radius:9px;margin-top:10px;font-weight:bold}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px 3px}
-nav div{text-align:center;font-size:12px}
+.name{font-weight:bold;margin-top:7px}
+.unit{font-size:12px;color:#777;margin-top:4px}
+.price{font-weight:bold;margin-top:8px}
+button{width:100%;border:0;border-radius:9px;padding:11px;background:#087f5b;color:white;font-weight:bold;margin-top:9px}
+button:active{transform:scale(.98)}
+.panel{display:none;background:white;border-radius:14px;padding:16px;margin-top:15px}
+.cart-item{border-bottom:1px solid #eee;padding:12px 0}
+.qty button{width:auto;padding:6px 12px;margin:5px}
+.total{font-size:19px;font-weight:bold;margin-top:15px}
+input,textarea{width:100%;padding:12px;margin-top:8px;border:1px solid #ccc;border-radius:9px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:10px 3px;z-index:10}
+nav button{background:white;color:#17201c;margin:0;width:auto;padding:5px;font-weight:normal}
+.empty{text-align:center;color:#777;padding:25px}
 @media(min-width:700px){.products{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
@@ -32,92 +42,320 @@ nav div{text-align:center;font-size:12px}
 <header>
 <div class="logo">MIRAJAM MARKET</div>
 <div class="tagline">The physical market in a digital world.</div>
-<div class="search">🔎 What are you looking for?</div>
+
+<div class="search">
+<input id="search" type="text" placeholder="🔎 What are you looking for?" oninput="searchProducts()">
+</div>
 </header>
 
 <main>
 
+<section id="home">
+
 <h2>Shop by category</h2>
 
 <div class="categories">
-<div class="category">🥬 Fresh Food</div>
-<div class="category">🥩 Meat</div>
-<div class="category">🐟 Fish</div>
-<div class="category">🌾 Grains</div>
-<div class="category">👕 Fashion</div>
-<div class="category">🏠 Household</div>
+<div class="category" onclick="filterCategory('Fresh Food')">🥬 Fresh Food</div>
+<div class="category" onclick="filterCategory('Meat')">🥩 Meat</div>
+<div class="category" onclick="filterCategory('Fish')">🐟 Fish</div>
+<div class="category" onclick="filterCategory('Grains')">🌾 Grains</div>
+<div class="category" onclick="filterCategory('Fruits')">🍌 Fruits</div>
+<div class="category" onclick="filterCategory('Household')">🏠 Household</div>
 </div>
 
-<h2>Popular market items</h2>
+<h2>Market Items</h2>
 
-<div class="products">
+<div id="products" class="products"></div>
 
-<div class="product">
-<div class="emoji">🍅</div>
-<div class="name">Tomatoes</div>
-<div class="unit">1 Mud</div>
-<button>Add to Basket</button>
+</section>
+
+<section id="basketPanel" class="panel">
+<h2>🛒 My Basket</h2>
+<div id="basket"></div>
+<div id="total" class="total"></div>
+<button onclick="showCheckout()">Proceed to Checkout</button>
+</section>
+
+<section id="checkoutPanel" class="panel">
+<h2>📦 Checkout</h2>
+
+<input id="customerName" placeholder="Your name">
+<input id="phone" placeholder="Phone number">
+<input id="address" placeholder="Delivery address">
+<textarea id="notes" placeholder="Anything we should know about your order?"></textarea>
+
+<button onclick="placeOrder()">Place Order</button>
+</section>
+
+<section id="ordersPanel" class="panel">
+<h2>📦 Orders</h2>
+<div id="orders">
+<div class="empty">Your orders will appear here.</div>
 </div>
+</section>
 
-<div class="product">
-<div class="emoji">🧅</div>
-<div class="name">Onions</div>
-<div class="unit">1 Mud</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🌶️</div>
-<div class="name">Fresh Pepper</div>
-<div class="unit">1 Mud</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🍚</div>
-<div class="name">Rice</div>
-<div class="unit">1 Paint</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🥩</div>
-<div class="name">Beef</div>
-<div class="unit">1 kg</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🐟</div>
-<div class="name">Fish</div>
-<div class="unit">1 kg</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🍌</div>
-<div class="name">Plantain</div>
-<div class="unit">1 Bunch</div>
-<button>Add to Basket</button>
-</div>
-
-<div class="product">
-<div class="emoji">🥚</div>
-<div class="name">Eggs</div>
-<div class="unit">1 Crate</div>
-<button>Add to Basket</button>
-</div>
-
-</div>
 </main>
 
 <nav>
-<div>🏠<br>Home</div>
-<div>🔎<br>Search</div>
-<div>🛒<br>Basket</div>
-<div>📦<br>Orders</div>
-<div>👤<br>Account</div>
+<button onclick="showHome()">🏠<br>Home</button>
+<button onclick="focusSearch()">🔎<br>Search</button>
+<button onclick="showBasket()">🛒<br>Basket (<span id="cartCount">0</span>)</button>
+<button onclick="showOrders()">📦<br>Orders</button>
 </nav>
 
-</body>
-</html>
+<script>
+
+const products = [
+
+{name:"Tomatoes",category:"Fresh Food",unit:"1 Mud",price:0,emoji:"🍅"},
+{name:"Onions",category:"Fresh Food",unit:"1 Mud",price:0,emoji:"🧅"},
+{name:"Fresh Pepper",category:"Fresh Food",unit:"1 Mud",price:0,emoji:"🌶️"},
+{name:"Rice",category:"Grains",unit:"1 Paint",price:0,emoji:"🍚"},
+{name:"Beans",category:"Grains",unit:"1 Paint",price:0,emoji:"🫘"},
+{name:"Beef",category:"Meat",unit:"1 kg",price:0,emoji:"🥩"},
+{name:"Fish",category:"Fish",unit:"1 kg",price:0,emoji:"🐟"},
+{name:"Plantain",category:"Fruits",unit:"1 Bunch",price:0,emoji:"🍌"},
+{name:"Eggs",category:"Fresh Food",unit:"1 Crate",price:0,emoji:"🥚"},
+{name:"Yam",category:"Fresh Food",unit:"1 Tuber",price:0,emoji:"🍠"},
+{name:"Palm Oil",category:"Household",unit:"1 Bottle",price:0,emoji:"🫗"},
+{name:"Crayfish",category:"Fish",unit:"1 Mud",price:0,emoji:"🦐"}
+
+];
+
+let basket=[];
+
+function displayProducts(list=products){
+
+const box=document.getElementById("products");
+
+if(list.length===0){
+box.innerHTML='<div class="empty">Item not found. Try another search.</div>';
+return;
+}
+
+box.innerHTML=list.map((p,i)=>`
+
+<div class="product">
+
+<div class="emoji">${p.emoji}</div>
+
+<div class="name">${p.name}</div>
+
+<div class="unit">${p.unit}</div>
+
+<div class="price">
+${p.price ? "₦"+p.price.toLocaleString() : "Market price"}
+</div>
+
+<button onclick="addToBasket(${products.indexOf(p)})">
+Add to Basket
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+function searchProducts(){
+
+const word=document.getElementById("search").value.toLowerCase();
+
+const result=products.filter(p=>
+p.name.toLowerCase().includes(word) ||
+p.category.toLowerCase().includes(word)
+);
+
+displayProducts(result);
+
+}
+
+function filterCategory(category){
+
+const result=products.filter(p=>p.category===category);
+
+displayProducts(result);
+
+window.scrollTo({top:300,behavior:"smooth"});
+
+}
+
+function addToBasket(index){
+
+const product=products[index];
+
+const existing=basket.find(item=>item.name===product.name);
+
+if(existing){
+
+existing.quantity++;
+
+}else{
+
+basket.push({
+...product,
+quantity:1
+});
+
+}
+
+updateBasket();
+
+alert(product.name+" added to your basket");
+
+}
+
+function updateBasket(){
+
+document.getElementById("cartCount").innerText=
+basket.reduce((sum,item)=>sum+item.quantity,0);
+
+const box=document.getElementById("basket");
+
+if(basket.length===0){
+
+box.innerHTML='<div class="empty">Your basket is empty.</div>';
+
+document.getElementById("total").innerText="";
+
+return;
+
+}
+
+box.innerHTML=basket.map((item,index)=>`
+
+<div class="cart-item">
+
+<strong>${item.emoji} ${item.name}</strong>
+
+<div>${item.unit}</div>
+
+<div class="qty">
+
+<button onclick="changeQuantity(${index},-1)">−</button>
+
+${item.quantity}
+
+<button onclick="changeQuantity(${index},1)">+</button>
+
+<button onclick="removeItem(${index})">Remove</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+const total=basket.reduce((sum,item)=>sum+(item.price*item.quantity),0);
+
+document.getElementById("total").innerText=
+total ? "Estimated total: ₦"+total.toLocaleString() :
+"Prices will be confirmed from the physical market before purchase.";
+
+}
+
+function changeQuantity(index,amount){
+
+basket[index].quantity+=amount;
+
+if(basket[index].quantity<=0){
+
+basket.splice(index,1);
+
+}
+
+updateBasket();
+
+}
+
+function removeItem(index){
+
+basket.splice(index,1);
+
+updateBasket();
+
+}
+
+function hidePanels(){
+
+document.getElementById("basketPanel").style.display="none";
+document.getElementById("checkoutPanel").style.display="none";
+document.getElementById("ordersPanel").style.display="none";
+document.getElementById("home").style.display="block";
+
+}
+
+function showHome(){
+
+hidePanels();
+
+displayProducts();
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function showBasket(){
+
+hidePanels();
+
+document.getElementById("basketPanel").style.display="block";
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function showCheckout(){
+
+if(basket.length===0){
+
+alert("Your basket is empty.");
+
+return;
+
+}
+
+hidePanels();
+
+document.getElementById("checkoutPanel").style.display="block";
+
+}
+
+function showOrders(){
+
+hidePanels();
+
+document.getElementById("ordersPanel").style.display="block";
+
+}
+
+function focusSearch(){
+
+showHome();
+
+document.getElementById("search").focus();
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function placeOrder(){
+
+const name=document.getElementById("customerName").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const address=document.getElementById("address").value.trim();
+
+if(!name || !phone || !address){
+
+alert("Please enter your name, phone number and delivery address.");
+
+return;
+
+}
+
+const order={
+name:name,
+phone:phone,
+address:address,
+items:basket,
+date:new Date().
