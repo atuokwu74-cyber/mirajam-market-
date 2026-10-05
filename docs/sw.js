@@ -1,9 +1,11 @@
-const CACHE_NAME = "mirajam-market-v2";
+const CACHE_NAME = "mirajam-market-v3";
 
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -33,8 +35,14 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(cached => {
-      return cached || fetch(event.request)
+
+      if (cached) {
+        return cached;
+      }
+
+      return fetch(event.request)
         .then(response => {
+
           const copy = response.clone();
 
           caches.open(CACHE_NAME).then(cache => {
@@ -42,8 +50,12 @@ self.addEventListener("fetch", event => {
           });
 
           return response;
+
         })
-        .catch(() => caches.match("./index.html"));
+        .catch(() => {
+          return caches.match("./index.html");
+        });
+
     })
   );
 });
