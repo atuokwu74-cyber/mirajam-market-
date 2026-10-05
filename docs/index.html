@@ -2337,6 +2337,36 @@ if ("serviceWorker" in navigator) {
       .catch(error => console.log("Service Worker error:", error));
   });
 }
+  async function loadProductsFromSupabase() {
+  console.log("Loading MIRAJAM products from Supabase...");
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("available", true)
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("Supabase products error:", error);
+    return;
+  }
+
+  console.log("Supabase products loaded:", data.length);
+
+  if (data && data.length > 0) {
+    products.length = 0;
+    data.forEach(product => {
+      products.push(product);
+    });
+
+    getCategories();
+    displayProducts();
+    updateCartCount();
+    renderBasket();
+  }
+}
+
+loadProductsFromSupabase();
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></scrlconst SUPABASE_URL = "https://zqvvtsvzlpcupasdyiju.supabase.co";
 const SUPABASE_KEY = "sb_publishable_nLyErKt0ppCTZ-qcCeVRkA_adSD1kMj";
 </script>
