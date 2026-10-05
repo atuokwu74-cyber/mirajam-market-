@@ -183,7 +183,29 @@ header{
   font-weight:bold;
   margin-bottom:10px;
 }
+async function loadProductsFromSupabase() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("available", true)
+    .order("id", { ascending: true });
 
+  if (error) {
+    console.error("Supabase products error:", error);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    products.length = 0;
+    products.push(...data);
+    getCategories();
+    displayProducts();
+    updateCartCount();
+    renderBasket();
+  }
+}
+
+loadProductsFromSupabase();
 .add-btn{
   width:100%;
   padding:10px;
