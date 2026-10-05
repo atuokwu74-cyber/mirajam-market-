@@ -1,4 +1,4 @@
-const CACHE_NAME = "mirajam-market-v1";
+const CACHE_NAME = "mirajam-market-v2";
 
 const ASSETS = [
   "./",
