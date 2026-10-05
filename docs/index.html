@@ -2305,7 +2305,7 @@ renderBasket();
 renderOrders();
 
 </script>
-</script>
+<script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js")
@@ -2313,6 +2313,7 @@ if ("serviceWorker" in navigator) {
       .catch(error => console.log("Service Worker error:", error));
   });
 }
+</script>
   </script>
 </body>
 </html>
