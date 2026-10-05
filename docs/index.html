@@ -1107,4 +1107,463 @@
               : ""
           }
 
-          <div class="quanti
+          <div class="quantity
+          ty">
+
+            <button
+              onclick="changeQuantity(${index}, -1)"
+            >
+              −
+            </button>
+
+            <strong>
+              ${item.quantity}
+            </strong>
+
+            <button
+              onclick="changeQuantity(${index}, 1)"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+        <button
+          class="remove-btn"
+          onclick="removeFromCart(${index})"
+        >
+          Remove
+        </button>
+
+      `;
+
+      basket.appendChild(div);
+
+    });
+
+
+    totalBox.innerHTML = `
+
+      <div class="total-box">
+
+        <div class="total-row">
+          <span>Total</span>
+          <span>${formatMoney(total)}</span>
+        </div>
+
+        <button
+          class="checkout-btn"
+          onclick="showCheckout()"
+        >
+          Continue to Checkout
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* =========================================
+     CHANGE QUANTITY
+     ========================================= */
+
+  function changeQuantity(index, amount) {
+
+    cart[index].quantity =
+      Number(cart[index].quantity) + amount;
+
+    if (cart[index].quantity <= 0) {
+      cart.splice(index, 1);
+    }
+
+    saveCart();
+
+  }
+
+
+  /* =========================================
+     REMOVE ITEM
+     ========================================= */
+
+  function removeFromCart(index) {
+
+    cart.splice(index, 1);
+
+    saveCart();
+
+    showToast("Item removed");
+
+  }
+
+
+  /* =========================================
+     PAGE NAVIGATION
+     ========================================= */
+
+  function showPage(pageId, button) {
+
+    document
+      .querySelectorAll(".page")
+      .forEach(page => {
+        page.classList.remove("active");
+      });
+
+    document
+      .getElementById(pageId)
+      .classList.add("active");
+
+    document
+      .querySelectorAll(".nav-btn")
+      .forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+    if (button) {
+      button.classList.add("active");
+    }
+
+    if (pageId === "basketPage") {
+      renderBasket();
+    }
+
+    if (pageId === "ordersPage") {
+      renderOrders();
+    }
+
+    window.scrollTo(0, 0);
+
+  }
+
+
+  /* =========================================
+     SEARCH
+     ========================================= */
+
+  function focusSearch() {
+
+    showPage("homePage");
+
+    setTimeout(() => {
+
+      const input =
+        document.getElementById("searchInput");
+
+      input.focus();
+
+      input.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }, 100);
+
+  }
+
+
+  /* =========================================
+     CHECKOUT
+     ========================================= */
+
+  function showCheckout() {
+
+    if (cart.length === 0) {
+
+      showToast("Your basket is empty");
+
+      return;
+
+    }
+
+    showPage("checkoutPage");
+
+  }
+
+
+  /* =========================================
+     PLACE ORDER
+     ========================================= */
+
+  function placeOrder() {
+
+    const name =
+      document
+        .getElementById("customerName")
+        .value
+        .trim();
+
+    const phone =
+      document
+        .getElementById("customerPhone")
+        .value
+        .trim();
+
+    const address =
+      document
+        .getElementById("customerAddress")
+        .value
+        .trim();
+
+
+    if (!name || !phone || !address) {
+
+      showToast(
+        "Please complete all details"
+      );
+
+      return;
+
+    }
+
+
+    if (cart.length === 0) {
+
+      showToast(
+        "Your basket is empty"
+      );
+
+      return;
+
+    }
+
+
+    let total = 0;
+
+    cart.forEach(item => {
+
+      total +=
+        Number(item.price || 0) *
+        Number(item.quantity || 0);
+
+    });
+
+
+    const order = {
+
+      id: "MRJ-" + Date.now(),
+
+      customerName: name,
+
+      phone: phone,
+
+      address: address,
+
+      items: [...cart],
+
+      total: total,
+
+      status: "Pending",
+
+      date:
+        new Date().toLocaleString("en-NG")
+
+    };
+
+
+    orders.unshift(order);
+
+    localStorage.setItem(
+      "mirajamOrders",
+      JSON.stringify(orders)
+    );
+
+
+    let message =
+      "Hello MIRAJAM Market 👋\n\n" +
+      "I want to place an order.\n\n";
+
+
+    message +=
+      "Name: " +
+      name +
+      "\n";
+
+    message +=
+      "Phone: " +
+      phone +
+      "\n";
+
+    message +=
+      "Address: " +
+      address +
+      "\n\n";
+
+    message +=
+      "ORDER ITEMS:\n";
+
+
+    cart.forEach(item => {
+
+      message +=
+        "• " +
+        item.name +
+        " x" +
+        item.quantity +
+        " - " +
+        formatMoney(
+          Number(item.price) *
+          Number(item.quantity)
+        ) +
+        "\n";
+
+    });
+
+
+    message +=
+      "\nTOTAL: " +
+      formatMoney(total);
+
+
+    const whatsappNumber =
+      "2348126641363";
+
+
+    const whatsappURL =
+      "https://wa.me/" +
+      whatsappNumber +
+      "?text=" +
+      encodeURIComponent(message);
+
+
+    cart = [];
+
+    localStorage.setItem(
+      "mirajamCart",
+      JSON.stringify(cart)
+    );
+
+    updateCartCount();
+
+    renderBasket();
+
+
+    window.open(
+      whatsappURL,
+      "_blank"
+    );
+
+  }
+
+
+  /* =========================================
+     ORDERS
+     ========================================= */
+
+  function renderOrders() {
+
+    const list =
+      document.getElementById("ordersList");
+
+
+    if (orders.length === 0) {
+
+      list.innerHTML = `
+        <div class="empty">
+          You have no orders yet.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    orders.forEach(order => {
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "order-card";
+
+
+      div.innerHTML = `
+
+        <strong>
+          ${order.id}
+        </strong>
+
+        <br>
+
+        <small>
+          ${order.date}
+        </small>
+
+        <br><br>
+
+        <strong>
+          Total:
+        </strong>
+
+        ${formatMoney(order.total)}
+
+        <br>
+
+        <span class="order-status">
+          ${order.status}
+        </span>
+
+      `;
+
+
+      list.appendChild(div);
+
+    });
+
+  }
+
+
+  /* =========================================
+     START APP
+     ========================================= */
+
+  updateCartCount();
+
+  renderBasket();
+
+  loadProducts();
+
+
+  /* =========================================
+     SERVICE WORKER
+     ========================================= */
+
+  if ("serviceWorker" in navigator) {
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        navigator.serviceWorker
+          .register("sw.js")
+          .then(() => {
+
+            console.log(
+              "MIRAJAM service worker registered"
+            );
+
+          })
+          .catch(error => {
+
+            console.log(
+              "Service worker error:",
+              error
+            );
+
+          });
+
+      }
+    );
+
+  }
+
+</script>
+
+</body>
+</html>
