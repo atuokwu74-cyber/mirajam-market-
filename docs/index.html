@@ -1,2374 +1,1110 @@
-uà<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MIRAJAM Market</title>
+
+  <meta name="theme-color" content="#075e35">
+  <meta name="description" content="MIRAJAM Market - The physical market in a digital world.">
+
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#075e35">
-<title>MIRAJAM Market</title>
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f6f8;
-  color:#222;
-  padding-bottom:80px;
-}
+    body {
+      background: #f5f6f8;
+      color: #222;
+      padding-bottom: 75px;
+    }
 
-header{
-  background:#075e35;
-  color:white;
-  padding:20px 15px;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
+    header {
+      background: #075e35;
+      color: white;
+      padding: 20px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
 
-.header-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    header h1 {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
 
-.logo{
-  font-size:24px;
-  font-weight:bold;
-}
+    header p {
+      font-size: 13px;
+      opacity: .9;
+    }
 
-.tagline{
-  font-size:12px;
-  margin-top:4px;
-  opacity:.9;
-}
+    .container {
+      padding: 15px;
+      max-width: 1100px;
+      margin: auto;
+    }
 
-.cart-icon{
-  background:white;
-  color:#075e35;
-  border:0;
-  border-radius:50%;
-  width:42px;
-  height:42px;
-  font-size:20px;
-  cursor:pointer;
-  position:relative;
-}
+    .search-box {
+      margin-bottom: 15px;
+    }
 
-.cart-count{
-  position:absolute;
-  top:-4px;
-  right:-4px;
-  background:#e53935;
-  color:white;
-  border-radius:50%;
-  min-width:20px;
-  height:20px;
-  font-size:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    .search-box input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+      background: white;
+    }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:15px;
-}
+    .categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 5px;
+    }
 
-.hero{
-  background:white;
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:15px;
-}
+    .category-btn {
+      border: none;
+      background: white;
+      padding: 9px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid #ddd;
+    }
 
-.hero h1{
-  color:#075e35;
-  margin-bottom:8px;
-}
+    .category-btn.active {
+      background: #075e35;
+      color: white;
+      border-color: #075e35;
+    }
 
-.hero p{
-  color:#555;
-  line-height:1.5;
-}
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
 
-.search-box{
-  display:flex;
-  margin:15px 0;
-}
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
 
-.search-box input{
-  flex:1;
-  padding:14px;
-  border:1px solid #ddd;
-  border-radius:10px 0 0 10px;
-  font-size:16px;
-}
+    .product-image {
+      width: 100%;
+      height: 135px;
+      background: #edf0ed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 55px;
+      overflow: hidden;
+    }
 
-.search-box button{
-  width:55px;
-  border:0;
-  background:#075e35;
-  color:white;
-  border-radius:0 10px 10px 0;
-  cursor:pointer;
-}
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-.categories{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding-bottom:8px;
-  margin-bottom:15px;
-}
+    .product-info {
+      padding: 11px;
+    }
 
-.category-btn{
-  white-space:nowrap;
-  border:1px solid #075e35;
-  background:white;
-  color:#075e35;
-  padding:9px 14px;
-  border-radius:20px;
-  cursor:pointer;
-}
+    .product-name {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-.category-btn.active{
-  background:#075e35;
-  color:white;
-}
+    .product-category {
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
 
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
-  gap:12px;
-}
+    .product-price {
+      color: #075e35;
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
 
-.product{
-  background:white;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 2px 7px rgba(0,0,0,.08);
-}
-.product-image{
-  height:125px;
-  background:#e8f1ec;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:48px;
-}
+    .product-unit {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 9px;
+    }
 
-.product-info{
-  padding:12px;
-}
+    .add-btn {
+      width: 100%;
+      border: none;
+      background: #075e35;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.product-name{
-  font-weight:bold;
-  margin-bottom:5px;
-}
+    .add-btn:active {
+      transform: scale(.97);
+    }
 
-.product-unit{
-  color:#777;
-  font-size:13px;
-  margin-bottom:8px;
-}
+    .empty {
+      text-align: center;
+      padding: 40px 15px;
+      color: #777;
+      grid-column: 1 / -1;
+    }
 
-.product-price{
-  color:#075e35;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-async function loadProductsFromSupabase() {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("available", true)
-    .order("id", { ascending: true });
+    .page {
+      display: none;
+    }
 
-  if (error) {
-    console.error("Supabase products error:", error);
-    return;
-  }
+    .page.active {
+      display: block;
+    }
 
-  if (data && data.length > 0) {
-    products.length = 0;
-    products.push(...data);
-    getCategories();
-    displayProducts();
-    updateCartCount();
-    renderBasket();
-  }
-}
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
 
-loadProductsFromSupabase();
-.add-btn{
-  width:100%;
-  padding:10px;
-  background:#075e35;
-  color:white;
-  border:0;
-  border-radius:8px;
-  cursor:pointer;
-}
+    .cart-item {
+      background: white;
+      padding: 13px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.section{
-  background:white;
-  border-radius:15px;
-  padding:15px;
-  margin-top:15px;
-}
+    .cart-item-info {
+      flex: 1;
+    }
 
-.section h2{
-  color:#075e35;
-  margin-bottom:15px;
-}
+    .cart-item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-.hidden{
-  display:none !important;
-}
+    .cart-item-price {
+      color: #075e35;
+      font-weight: bold;
+    }
 
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  border-bottom:1px solid #eee;
-  padding:12px 0;
-}
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
-.cart-item-info{
-  flex:1;
-}
+    .quantity button {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: #075e35;
+      color: white;
+      font-size: 18px;
+    }
 
-.cart-item-name{
-  font-weight:bold;
-}
+    .remove-btn {
+      border: none;
+      background: #eee;
+      padding: 7px;
+      border-radius: 6px;
+      color: #b00020;
+    }
 
-.cart-item-unit{
-  color:#777;
-  font-size:12px;
-  margin-top:4px;
-}
+    .total-box {
+      background: white;
+      padding: 17px;
+      border-radius: 12px;
+      margin-top: 15px;
+    }
 
-.qty-controls{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:8px;
-}
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-.qty-controls button{
-  width:30px;
-  height:30px;
-  border:0;
-  background:#075e35;
-  color:white;
-  border-radius:6px;
-  cursor:pointer;
-}
+    .checkout-btn {
+      width: 100%;
+      margin-top: 15px;
+      border: none;
+      background: #075e35;
+      color: white;
+      padding: 14px;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-.remove-btn{
-  background:#e53935 !important;
-}
+    .checkout-form {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+    }
 
-.total{
-  display:flex;
-  justify-content:space-between;
-  font-size:20px;
-  font-weight:bold;
-  padding:15px 0;
-}
+    .checkout-form input,
+    .checkout-form textarea {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      font-size: 15px;
+    }
 
-.primary-btn{
-  width:100%;
-  padding:14px;
-  background:#075e35;
-  color:white;
-  border:0;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-}
+    .checkout-form textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
 
-.secondary-btn{
-  width:100%;
-  padding:12px;
-  background:#eee;
-  color:#222;
-  border:0;
-  border-radius:10px;
-  margin-top:8px;
-  cursor:pointer;
-}
+    .order-card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
 
-.form-group{
-  margin-bottom:13px;
-}
+    .order-status {
+      display: inline-block;
+      background: #e5f5eb;
+      color: #075e35;
+      padding: 5px 9px;
+      border-radius: 15px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
 
-.form-group label{
-  display:block;
-  margin-bottom:6px;
-  font-weight:bold;
-}
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
 
-.form-group input,
-.form-group textarea,
-.form-group select{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  font-size:15px;
-}
+    .nav-btn {
+      border: none;
+      background: none;
+      color: #666;
+      font-size: 11px;
+      position: relative;
+    }
 
-.order-card{
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:12px;
-  margin-bottom:10px;
-}
+    .nav-btn span {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
 
-.order-status{
-  display:inline-block;
-  background:#fff3cd;
-  color:#856404;
-  padding:5px 9px;
-  border-radius:15px;
-  font-size:12px;
-  margin-top:7px;
-}
+    .nav-btn.active {
+      color: #075e35;
+      font-weight: bold;
+    }
 
-.empty{
-  text-align:center;
-  color:#777;
-  padding:30px 10px;
-}
+    .cart-count {
+      position: absolute;
+      top: -3px;
+      right: 7px;
+      background: red;
+      color: white;
+      font-size: 10px;
+      border-radius: 50%;
+      min-width: 17px;
+      height: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:white;
-  border-top:1px solid #ddd;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:20;
-}
+    .loading {
+      text-align: center;
+      padding: 50px 10px;
+      color: #075e35;
+      grid-column: 1 / -1;
+    }
 
-.nav-btn{
-  border:0;
-  background:none;
-  color:#666;
-  font-size:12px;
-  cursor:pointer;
-}
+    .error-box {
+      background: #fff0f0;
+      color: #b00020;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
 
-.nav-btn span{
-  display:block;
-  font-size:22px;
-  margin-bottom:2px;
-}
+    .profile-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      line-height: 1.8;
+    }
 
-.nav-btn.active{
-  color:#075e35;
-  font-weight:bold;
-}
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      display: none;
+      z-index: 200;
+      font-size: 14px;
+    }
 
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:80px;
-  transform:translateX(-50%);
-  background:#222;
-  color:white;
-  padding:12px 18px;
-  border-radius:8px;
-  display:none;
-  z-index:50;
-}
-
-@media(max-width:500px){
-  .products{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .product-image{
-    height:105px;
-  }
-}
-</style>
+    @media (min-width: 700px) {
+      .products {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div class="header-top">
-    <div>
-      <div class="logo">MIRAJAM Market</div>
-      <div class="tagline">The physical market in a digital world.</div>
-    </div>
-
-    <button class="cart-icon" type="button" onclick="showPage('basket')">
-      🛒
-      <span class="cart-count" id="cartCount">0</span>
-    </button>
-  </div>
+  <h1>MIRAJAM Market</h1>
+  <p>The physical market in a digital world.</p>
 </header>
 
-<main class="container">
+<!-- HOME -->
+<section id="homePage" class="page active">
+  <div class="container">
 
-<section id="homePage">
+    <div class="search-box">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Search for products..."
+        oninput="displayProducts()"
+      >
+    </div>
 
-  <div class="hero">
-    <h1>Your Market, Brought To You</h1>
+    <div id="categories" class="categories"></div>
 
-    <p>
-      Search for what you need. Choose the normal market quantity.
-      MIRAJAM goes to the physical market, buys it for you,
-      checks it and arranges delivery.
-    </p>
-  </div>
-
-  <div class="search-box">
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search for anything in the market..."
-      oninput="searchProducts()"
-    >
-
-    <button
-      type="button"
-      onclick="searchProducts()"
-    >
-      🔍
-    </button>
+    <div id="productList" class="products">
+      <div class="loading">Loading products...</div>
+    </div>
 
   </div>
-
-  <div
-    class="categories"
-    id="categories"
-  ></div>
-
-  <div
-    class="products"
-    id="productList"
-  ></div>
-
 </section>
 
+<!-- BASKET -->
+<section id="basketPage" class="page">
+  <div class="container">
 
-<section
-  id="basketPage"
-  class="section hidden"
->
+    <div class="section-title">My Basket</div>
 
-  <h2>🛒 Your Basket</h2>
+    <div id="basketList"></div>
 
-  <div id="basketItems"></div>
+    <div id="basketTotal"></div>
 
-  <div class="total">
-    <span>Estimated total</span>
-    <span id="basketTotal">₦0</span>
   </div>
-
-  <p style="font-size:12px;color:#777;margin-bottom:12px;">
-    Market prices can change. MIRAJAM may contact you if the actual
-    market price differs significantly.
-  </p>
-
-  <button
-    class="primary-btn"
-    type="button"
-    onclick="showPage('checkout')"
-  >
-    Continue to Checkout
-  </button>
-
 </section>
 
+<!-- CHECKOUT -->
+<section id="checkoutPage" class="page">
+  <div class="container">
 
-<section
-  id="checkoutPage"
-  class="section hidden"
->
+    <div class="section-title">Checkout</div>
 
-  <h2>📦 Checkout</h2>
+    <div class="checkout-form">
 
-  <div class="form-group">
+      <input
+        type="text"
+        id="customerName"
+        placeholder="Your full name"
+      >
 
-    <label>Full Name</label>
+      <input
+        type="tel"
+        id="customerPhone"
+        placeholder="Phone number"
+      >
 
-    <input
-      id="customerName"
-      type="text"
-      placeholder="Enter your name"
-    >
+      <textarea
+        id="customerAddress"
+        placeholder="Delivery address"
+      ></textarea>
 
-  </div>
+      <button class="checkout-btn" onclick="placeOrder()">
+        Place Order on WhatsApp
+      </button>
 
-  <div class="form-group">
-
-    <label>Phone Number</label>
-
-    <input
-      id="customerPhone"
-      type="tel"
-      placeholder="08012345678"
-    >
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Delivery Address</label>
-
-    <textarea
-      id="address"
-      rows="4"
-      placeholder="Enter your delivery address"
-    ></textarea>
+    </div>
 
   </div>
-
-  <div class="form-group">
-
-    <label>Delivery Area</label>
-
-    <select id="deliveryArea">
-
-      <option value="">Select area</option>
-
-      <option>Abuja Municipal</option>
-      <option>Apo</option>
-      <option>Garki</option>
-      <option>Wuse</option>
-      <option>Jabi</option>
-      <option>Maitama</option>
-      <option>Asokoro</option>
-      <option>Gwarinpa</option>
-      <option>Lokogoma</option>
-      <option>Galadimawa</option>
-      <option>Gudu</option>
-      <option>Nyanya</option>
-      <option>Kubwa</option>
-      <option>Other Abuja Area</option>
-
-    </select>
-
-  </div>
-
-  <div class="form-group">
-
-    <label>Payment Method</label>
-
-    <select id="paymentMethod">
-
-      <option value="Pay on confirmation">
-        Pay on confirmation
-      </option>
-
-      <option value="Online payment">
-        Online payment
-      </option>
-
-    </select>
-
-  </div>
-
-  <div class="total">
-
-    <span>Estimated total</span>
-
-    <span id="checkoutTotal">₦0</span>
-
-  </div>
-
-  <button
-    class="primary-btn"
-    type="button"
-    onclick="placeOrder()"
-  >
-    Place Order
-  </button>
-
-  <button
-    class="secondary-btn"
-    type="button"
-    onclick="showPage('basket')"
-  >
-    Back to Basket
-  </button>
-
 </section>
 
+<!-- ORDERS -->
+<section id="ordersPage" class="page">
+  <div class="container">
 
-<section
-  id="ordersPage"
-  class="section hidden"
->
+    <div class="section-title">My Orders</div>
 
-  <h2>📋 My Orders</h2>
+    <div id="ordersList"></div>
 
-  <div id="ordersList"></div>
-
+  </div>
 </section>
 
+<!-- ACCOUNT -->
+<section id="accountPage" class="page">
+  <div class="container">
 
-<section
-  id="accountPage"
-  class="section hidden"
->
+    <div class="section-title">MIRAJAM Market</div>
 
-  <h2>👤 Account</h2>
+    <div class="profile-box">
+      <strong>MIRAJAM Market</strong><br>
+      The physical market in a digital world.<br><br>
 
-  <p style="line-height:1.6;">
+      We buy your market goods physically from the market
+      and arrange delivery to you.<br><br>
 
-    Welcome to MIRAJAM Market.
+      <strong>WhatsApp:</strong><br>
+      +234 812 664 1363<br><br>
 
-    <br><br>
+      <strong>Email:</strong><br>
+      atuokwu74@gmail.com
+    </div>
 
-    MIRAJAM helps you buy goods from the physical market
-    without you having to visit the market yourself.
-
-  </p>
-
-  <br>
-
-  <p>
-    <strong>Service area:</strong> Abuja
-  </p>
-
-  <p>
-    <strong>Delivery:</strong> Market-to-door delivery
-  </p>
-
-  <p>
-    <strong>Business:</strong> MIRAJAM Market
-  </p>
-
+  </div>
 </section>
 
-</main>
-
-
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
 
-  <button
-    class="nav-btn active"
-    id="homeNav"
-    type="button"
-    onclick="showPage('home')"
-  >
-
+  <button class="nav-btn active" onclick="showPage('homePage', this)">
     <span>🏠</span>
     Home
-
   </button>
 
-
-  <button
-    class="nav-btn"
-    id="searchNav"
-    type="button"
-    onclick="focusSearch()"
-  >
-
-    <span>🔍</span>
+  <button class="nav-btn" onclick="focusSearch()">
+    <span>🔎</span>
     Search
-
   </button>
 
-
-  <button
-    class="nav-btn"
-    id="basketNav"
-    type="button"
-    onclick="showPage('basket')"
-  >
-
+  <button class="nav-btn" onclick="showPage('basketPage', this)">
     <span>🛒</span>
     Basket
-
+    <b id="cartCount" class="cart-count">0</b>
   </button>
 
-
-  <button
-    class="nav-btn"
-    id="ordersNav"
-    type="button"
-    onclick="showPage('orders')"
-  >
-
-    <span>📋</span>
+  <button class="nav-btn" onclick="showPage('ordersPage', this)">
+    <span>📦</span>
     Orders
-
   </button>
 
-
-  <button
-    class="nav-btn"
-    id="accountNav"
-    type="button"
-    onclick="showPage('account')"
-  >
-
+  <button class="nav-btn" onclick="showPage('accountPage', this)">
     <span>👤</span>
     Account
-
   </button>
 
 </nav>
 
+<div id="toast" class="toast"></div>
 
-<div
-  id="toast"
-  class="toast"
-></div>
-
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const products = [
+  /* =========================================
+     SUPABASE CONNECTION
+     ========================================= */
 
-/* FRESH FOOD */
+  const SUPABASE_URL =
+    "https://zqvvtsvzlpcupasdyiju.supabase.co";
 
-{
- id:1,
- name:"Tomatoes",
- category:"Fresh Food",
- unit:"Mud",
- price:3500,
- icon:"🍅"
-},
+  const SUPABASE_KEY =
+    "sb_publishable_nLyErKt0ppCTZ-qcCeVRkA_adSD1kMj";
 
-{
- id:2,
- name:"Tomatoes",
- category:"Fresh Food",
- unit:"Basket",
- price:12000,
- icon:"🍅"
-},
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-{
- id:3,
- name:"Fresh Pepper",
- category:"Fresh Food",
- unit:"Mud",
- price:4000,
- icon:"🌶️"
-},
 
-{
- id:4,
- name:"Fresh Pepper",
- category:"Fresh Food",
- unit:"Basket",
- price:13000,
- icon:"🌶️"
-},
+  /* =========================================
+     APP DATA
+     ========================================= */
 
-{
- id:5,
- name:"Onions",
- category:"Fresh Food",
- unit:"Mud",
- price:4000,
- icon:"🧅"
-},
+  let products = [];
 
-{
- id:6,
- name:"Onions",
- category:"Fresh Food",
- unit:"Basket",
- price:14000,
- icon:"🧅"
-},
+  let cart =
+    JSON.parse(
+      localStorage.getItem("mirajamCart")
+    ) || [];
 
-{
- id:7,
- name:"Garlic",
- category:"Fresh Food",
- unit:"Mud",
- price:5000,
- icon:"🧄"
-},
+  let orders =
+    JSON.parse(
+      localStorage.getItem("mirajamOrders")
+    ) || [];
 
-{
- id:8,
- name:"Ginger",
- category:"Fresh Food",
- unit:"Mud",
- price:4500,
- icon:"🫚"
-},
+  let currentCategory = "All";
 
-{
- id:9,
- name:"Potatoes",
- category:"Fresh Food",
- unit:"Mud",
- price:5000,
- icon:"🥔"
-},
 
-{
- id:10,
- name:"Sweet Potatoes",
- category:"Fresh Food",
- unit:"Mud",
- price:4500,
- icon:"🍠"
-},
+  /* =========================================
+     MONEY
+     ========================================= */
 
+  function formatMoney(amount) {
 
-/* MEAT */
+    return "₦" +
+      Number(amount || 0)
+        .toLocaleString("en-NG");
 
-{
- id:11,
- name:"Beef",
- category:"Meat",
- unit:"1 kg",
- price:6500,
- icon:"🥩"
-},
+  }
 
-{
- id:12,
- name:"Beef",
- category:"Meat",
- unit:"2 kg",
- price:12500,
- icon:"🥩"
-},
 
-{
- id:13,
- name:"Goat Meat",
- category:"Meat",
- unit:"1 kg",
- price:7500,
- icon:"🥩"
-},
+  /* =========================================
+     TOAST
+     ========================================= */
 
-{
- id:14,
- name:"Ram Meat",
- category:"Meat",
- unit:"1 kg",
- price:8000,
- icon:"🥩"
-},
+  function showToast(message) {
 
-{
- id:15,
- name:"Cow Offal",
- category:"Meat",
- unit:"1 kg",
- price:4500,
- icon:"🥩"
-},
+    const toast =
+      document.getElementById("toast");
 
-{
- id:16,
- name:"Beef Liver",
- category:"Meat",
- unit:"1 kg",
- price:5000,
- icon:"🥩"
-},
+    toast.textContent = message;
+    toast.style.display = "block";
 
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 2500);
 
-/* FISH */
+  }
 
-{
- id:17,
- name:"Catfish",
- category:"Fish",
- unit:"1 kg",
- price:5500,
- icon:"🐟"
-},
 
-{
- id:18,
- name:"Catfish",
- category:"Fish",
- unit:"1 piece",
- price:4000,
- icon:"🐟"
-},
+  /* =========================================
+     SAVE CART
+     ========================================= */
 
-{
- id:19,
- name:"Tilapia",
- category:"Fish",
- unit:"1 kg",
- price:6500,
- icon:"🐟"
-},
+  function saveCart() {
 
-{
- id:20,
- name:"Stockfish",
- category:"Fish",
- unit:"1 piece",
- price:8000,
- icon:"🐟"
-},
+    localStorage.setItem(
+      "mirajamCart",
+      JSON.stringify(cart)
+    );
 
-{
- id:21,
- name:"Dried Fish",
- category:"Fish",
- unit:"Mud",
- price:7000,
- icon:"🐟"
-},
+    updateCartCount();
+    renderBasket();
 
-{
- id:22,
- name:"Crayfish",
- category:"Fish",
- unit:"Mud",
- price:9000,
- icon:"🦐"
-},
+  }
 
 
-/* GRAINS */
+  /* =========================================
+     CART COUNT
+     ========================================= */
 
-{
- id:23,
- name:"Local Rice",
- category:"Grains",
- unit:"Mud",
- price:4500,
- icon:"🍚"
-},
+  function updateCartCount() {
 
-{
- id:24,
- name:"Local Rice",
- category:"Grains",
- unit:"Paint",
- price:6500,
- icon:"🍚"
-},
-
-{
- id:25,
- name:"Foreign Rice",
- category:"Grains",
- unit:"5 kg",
- price:9500,
- icon:"🍚"
-},
-
-{
- id:26,
- name:"Foreign Rice",
- category:"Grains",
- unit:"25 kg bag",
- price:40000,
- icon:"🍚"
-},
-
-{
- id:27,
- name:"Foreign Rice",
- category:"Grains",
- unit:"50 kg bag",
- price:75000,
- icon:"🍚"
-},
-
-{
- id:28,
- name:"Beans",
- category:"Grains",
- unit:"Paint",
- price:5000,
- icon:"🫘"
-},
-
-{
- id:29,
- name:"Beans",
- category:"Grains",
- unit:"Mud",
- price:7000,
- icon:"🫘"
-},
-
-{
- id:30,
- name:"Beans",
- category:"Grains",
- unit:"50 kg bag",
- price:70000,
- icon:"🫘"
-},
-
-{
- id:31,
- name:"Garri",
- category:"Grains",
- unit:"Paint",
- price:2500,
- icon:"🥣"
-},
-
-{
- id:32,
- name:"Garri",
- category:"Grains",
- unit:"Mud",
- price:4000,
- icon:"🥣"
-},
-
-{
- id:33,
- name:"Maize",
- category:"Grains",
- unit:"Paint",
- price:2500,
- icon:"🌽"
-},
-
-{
- id:34,
- name:"Maize",
- category:"Grains",
- unit:"Mud",
- price:4000,
- icon:"🌽"
-},
-
-
-/* SPICES */
-
-{
- id:35,
- name:"Maggi Seasoning Cubes",
- category:"Spices",
- unit:"1 pack",
- price:1500,
- icon:"🧂"
-},
-
-{
- id:36,
- name:"Knorr Seasoning Cubes",
- category:"Spices",
- unit:"1 pack",
- price:1500,
- icon:"🧂"
-},
-
-{
- id:37,
- name:"Curry Powder",
- category:"Spices",
- unit:"1 sachet",
- price:700,
- icon:"🌿"
-},
-
-{
- id:38,
- name:"Thyme",
- category:"Spices",
- unit:"1 sachet",
- price:700,
- icon:"🌿"
-},
-
-{
- id:39,
- name:"Dry Pepper",
- category:"Spices",
- unit:"Mud",
- price:7000,
- icon:"🌶️"
-},
-
-{
- id:40,
- name:"Salt",
- category:"Spices",
- unit:"1 kg",
- price:1200,
- icon:"🧂"
-},
-
-{
- id:41,
- name:"Sugar",
- category:"Spices",
- unit:"1 kg",
- price:1800,
- icon:"🍚"
-},
-
-{
- id:42,
- name:"Groundnut",
- category:"Spices",
- unit:"Mud",
- price:5000,
- icon:"🥜"
-},
-
-{
- id:43,
- name:"Egusi",
- category:"Spices",
- unit:"Mud",
- price:9000,
- icon:"🥜"
-},
-
-{
- id:44,
- name:"Ogbono",
- category:"Spices",
- unit:"Mud",
- price:12000,
- icon:"🥜"
-},
-
-
-/* OILS */
-
-{
- id:45,
- name:"Palm Oil",
- category:"Oils",
- unit:"1 litre",
- price:2500,
- icon:"🫗"
-},
-
-{
- id:46,
- name:"Palm Oil",
- category:"Oils",
- unit:"5 litre gallon",
- price:11000,
- icon:"🫗"
-},
-
-{
- id:47,
- name:"Groundnut Oil",
- category:"Oils",
- unit:"1 litre",
- price:3000,
- icon:"🫗"
-},
-
-{
- id:48,
- name:"Groundnut Oil",
- category:"Oils",
- unit:"5 litre gallon",
- price:14000,
- icon:"🫗"
-},
-
-
-/* FRUITS */
-
-{
- id:49,
- name:"Plantain",
- category:"Fruits",
- unit:"Bunch",
- price:6000,
- icon:"🍌"
-},
-
-{
- id:50,
- name:"Plantain",
- category:"Fruits",
- unit:"1 piece",
- price:500,
- icon:"🍌"
-},
-
-{
- id:51,
- name:"Banana",
- category:"Fruits",
- unit:"Bunch",
- price:4000,
- icon:"🍌"
-},
-
-{
- id:52,
- name:"Watermelon",
- category:"Fruits",
- unit:"1 piece",
- price:2500,
- icon:"🍉"
-},
-
-{
- id:53,
- name:"Pineapple",
- category:"Fruits",
- unit:"1 piece",
- price:1800,
- icon:"🍍"
-},
-
-{
- id:54,
- name:"Orange",
- category:"Fruits",
- unit:"Basket",
- price:8000,
- icon:"🍊"
-},
-
-
-/* VEGETABLES */
-
-{
- id:55,
- name:"Ugu",
- category:"Vegetables",
- unit:"Bunch",
- price:800,
- icon:"🥬"
-},
-
-{
- id:56,
- name:"Spinach",
- category:"Vegetables",
- unit:"Bunch",
- price:700,
- icon:"🥬"
-},
-
-{
- id:57,
- name:"Waterleaf",
- category:"Vegetables",
- unit:"Bunch",
- price:700,
- icon:"🥬"
-},
-
-{
- id:58,
- name:"Okra",
- category:"Vegetables",
- unit:"Mud",
- price:5000,
- icon:"🥬"
-},
-
-
-/* EGGS & DAIRY */
-
-{
- id:59,
- name:"Eggs",
- category:"Eggs & Dairy",
- unit:"1 piece",
- price:300,
- icon:"🥚"
-},
-
-{
- id:60,
- name:"Eggs",
- category:"Eggs & Dairy",
- unit:"1 crate",
- price:9000,
- icon:"🥚"
-},
-
-{
- id:61,
- name:"Milk",
- category:"Eggs & Dairy",
- unit:"1 tin",
- price:1800,
- icon:"🥛"
-},
-
-
-/* HOUSEHOLD */
-
-{
- id:62,
- name:"Bath Soap",
- category:"Household",
- unit:"1 piece",
- price:1000,
- icon:"🧼"
-},
-
-{
- id:63,
- name:"Washing Powder",
- category:"Household",
- unit:"1 kg",
- price:3500,
- icon:"🧺"
-},
-
-{
- id:64,
- name:"Toilet Tissue",
- category:"Household",
- unit:"1 pack",
- price:2500,
- icon:"🧻"
-},
-
-{
- id:65,
- name:"Detergent",
- category:"Household",
- unit:"1 kg",
- price:3000,
- icon:"🧺"
-},
-
-{
- id:66,
- name:"Plastic Bucket",
- category:"Household",
- unit:"1 piece",
- price:3500,
- icon:"🪣"
-},
-
-
-/* CLOTHING */
-
-{
- id:67,
- name:"Men's T-Shirt",
- category:"Clothing",
- unit:"1 piece",
- price:5000,
- icon:"👕"
-},
-
-{
- id:68,
- name:"Women's T-Shirt",
- category:"Clothing",
- unit:"1 piece",
- price:5000,
- icon:"👚"
-},
-
-{
- id:69,
- name:"Men's Trouser",
- category:"Clothing",
- unit:"1 piece",
- price:8000,
- icon:"👖"
-},
-
-{
- id:70,
- name:"Women's Skirt",
- category:"Clothing",
- unit:"1 piece",
- price:7000,
- icon:"👗"
-},
-
-
-/* SHOES */
-
-{
- id:71,
- name:"Men's Slippers",
- category:"Shoes",
- unit:"1 pair",
- price:5000,
- icon:"🩴"
-},
-
-{
- id:72,
- name:"Men's Shoes",
- category:"Shoes",
- unit:"1 pair",
- price:12000,
- icon:"👞"
-},
-
-{
- id:73,
- name:"Women's Shoes",
- category:"Shoes",
- unit:"1 pair",
- price:12000,
- icon:"👠"
-},
-
-
-/* OTHER */
-
-{
- id:74,
- name:"Umbrella",
- category:"Other",
- unit:"1 piece",
- price:6000,
- icon:"☂️"
-},
-
-{
- id:75,
- name:"Torchlight",
- category:"Other",
- unit:"1 piece",
- price:4000,
- icon:"🔦"
-},
-
-{
- id:76,
- name:"Phone Charger",
- category:"Other",
- unit:"1 piece",
- price:5000,
- icon:"🔌"
-},
-
-{
- id:77,
- name:"Kitchen Knife",
- category:"Other",
- unit:"1 piece",
- price:3000,
- icon:"🔪"
-},
-
-{
- id:78,
- name:"Cooking Pot",
- category:"Other",
- unit:"1 piece",
- price:10000,
- icon:"🍲"
-}
-
-];
-
-
-let cart =
-  JSON.parse(
-    localStorage.getItem("mirajamCart")
-  ) || [];
-
-
-let orders =
-  JSON.parse(
-    localStorage.getItem("mirajamOrders")
-  ) || [];
-
-
-let currentCategory = "All";
-
-
-function formatMoney(amount){
-
-  return "₦" +
-    Number(amount).toLocaleString("en-NG");
-
-}
-
-
-function saveCart(){
-
-  localStorage.setItem(
-    "mirajamCart",
-    JSON.stringify(cart)
-  );
-
-}
-
-
-function saveOrders(){
-
-  localStorage.setItem(
-    "mirajamOrders",
-    JSON.stringify(orders)
-  );
-
-}
-
-
-function showToast(message){
-
-  const toast =
-    document.getElementById("toast");
-
-  toast.textContent = message;
-
-  toast.style.display = "block";
-
-  setTimeout(function(){
-
-    toast.style.display = "none";
-
-  },2000);
-
-}
-
-
-function getCategories(){
-
-  const categories = [
-    "All",
-    ...new Set(
-      products.map(
-        product => product.category
-      )
-    )
-  ];
-
-  const container =
-    document.getElementById("categories");
-
-  container.innerHTML = "";
-
-  categories.forEach(category => {
-
-    const button =
-      document.createElement("button");
-
-    button.type = "button";
-
-    button.className =
-      "category-btn " +
-      (
-        category === currentCategory
-          ? "active"
-          : ""
+    const count =
+      cart.reduce(
+        (total, item) =>
+          total + Number(item.quantity || 0),
+        0
       );
 
-    button.textContent = category;
+    document.getElementById(
+      "cartCount"
+    ).textContent = count;
 
-    button.onclick = function(){
+  }
 
-      currentCategory = category;
+
+  /* =========================================
+     LOAD PRODUCTS FROM SUPABASE
+     ========================================= */
+
+  async function loadProducts() {
+
+    const productList =
+      document.getElementById("productList");
+
+    productList.innerHTML =
+      '<div class="loading">Loading products from MIRAJAM Market...</div>';
+
+    try {
+
+      /*
+       * We deliberately select all columns.
+       * This makes the app compatible with
+       * different product fields in your table.
+       */
+
+      const { data, error } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .order("id", { ascending: true });
+
+      if (error) {
+
+        console.error(
+          "Supabase error:",
+          error
+        );
+
+        productList.innerHTML = `
+          <div class="error-box">
+            <strong>Products could not be loaded.</strong><br><br>
+            ${error.message}
+          </div>
+        `;
+
+        return;
+      }
+
+      if (!data || data.length === 0) {
+
+        productList.innerHTML = `
+          <div class="empty">
+            No products were found in your Supabase products table.
+          </div>
+        `;
+
+        return;
+      }
+
+      /*
+       * THIS IS IMPORTANT:
+       * Supabase becomes the source of products.
+       * The old hardcoded products are gone.
+       */
+
+      products = data;
+
+      console.log(
+        "MIRAJAM products loaded:",
+        products
+      );
 
       getCategories();
+      displayProducts();
+      updateCartCount();
 
+    } catch (error) {
+
+      console.error(error);
+
+      productList.innerHTML = `
+        <div class="error-box">
+          Something went wrong while connecting
+          to MIRAJAM Market.
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================================
+     CATEGORIES
+     ========================================= */
+
+  function getCategories() {
+
+    const categories =
+      [
+        ...new Set(
+          products
+            .map(product => product.category)
+            .filter(Boolean)
+        )
+      ];
+
+    const container =
+      document.getElementById(
+        "categories"
+      );
+
+    container.innerHTML = "";
+
+    const allButton =
+      document.createElement("button");
+
+    allButton.className =
+      "category-btn " +
+      (currentCategory === "All"
+        ? "active"
+        : "");
+
+    allButton.textContent = "All";
+
+    allButton.onclick = () => {
+
+      currentCategory = "All";
+
+      getCategories();
       displayProducts();
 
     };
 
-    container.appendChild(button);
-
-  });
-
-}
+    container.appendChild(allButton);
 
 
-function displayProducts(){
+    categories.forEach(category => {
 
-  const list =
-    document.getElementById("productList");
+      const button =
+        document.createElement("button");
 
-  const search =
-    document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
+      button.className =
+        "category-btn " +
+        (currentCategory === category
+          ? "active"
+          : "");
 
-  const filtered =
-    products.filter(product => {
+      button.textContent = category;
 
-      const matchesCategory =
-        currentCategory === "All" ||
-        product.category === currentCategory;
+      button.onclick = () => {
 
-      const matchesSearch =
-        product.name
-          .toLowerCase()
-          .includes(search) ||
+        currentCategory = category;
 
-        product.category
-          .toLowerCase()
-          .includes(search) ||
+        getCategories();
+        displayProducts();
 
-        product.unit
-          .toLowerCase()
-          .includes(search);
+      };
 
-      return (
-        matchesCategory &&
-        matchesSearch
-      );
+      container.appendChild(button);
 
     });
-
-
-  list.innerHTML = "";
-
-
-  if(filtered.length === 0){
-
-    list.innerHTML = `
-      <div
-        class="empty"
-        style="grid-column:1/-1;"
-      >
-        No item found.
-        <br><br>
-        Try another search or request the item from MIRAJAM.
-      </div>
-    `;
-
-    return;
 
   }
 
 
-  filtered.forEach(product => {
+  /* =========================================
+     PRODUCT IMAGE
+     ========================================= */
 
-    const card =
-      document.createElement("div");
+  function getProductImage(product) {
 
-    card.className = "product";
+    /*
+     * Supports common image column names.
+     */
 
+    const image =
+      product.image ||
+      product.image_url ||
+      product.imageUrl ||
+      product.photo ||
+      product.picture ||
+      "";
 
-    card.innerHTML = `
+    if (image) {
 
-      <div class="product-image">
-        ${product.icon}
-      </div>
-
-      <div class="product-info">
-
-        <div class="product-name">
-          ${product.name}
-        </div>
-
-        <div class="product-unit">
-          ${product.unit}
-        </div>
-
-        <div class="product-price">
-          ${formatMoney(product.price)}
-        </div>
-
-        <button
-          class="add-btn"
-          type="button"
-          onclick="addToCart(${product.id})"
+      return `
+        <img
+          src="${image}"
+          alt="${product.name || "Product"}"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='🛒';"
         >
-          Add to Basket
-        </button>
+      `;
 
-      </div>
+    }
 
-    `;
+    /*
+     * If there is no image,
+     * use an icon/emoji if available.
+     */
 
+    return product.icon || "🛒";
 
-    list.appendChild(card);
-
-  });
-
-}
-
-
-function searchProducts(){
-
-  currentCategory = "All";
-
-  getCategories();
-
-  displayProducts();
-
-}
+  }
 
 
-function addToCart(id){
+  /* =========================================
+     DISPLAY PRODUCTS
+     ========================================= */
 
-  const product =
-    products.find(
-      item => item.id === id
-    );
+  function displayProducts() {
 
-  if(!product) return;
+    const list =
+      document.getElementById(
+        "productList"
+      );
+
+    const search =
+      document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const filtered =
+      products.filter(product => {
+
+        const name =
+          String(
+            product.name || ""
+          ).toLowerCase();
+
+        const category =
+          String(
+            product.category || ""
+          ).toLowerCase();
+
+        const matchesSearch =
+          name.includes(search) ||
+          category.includes(search);
+
+        const matchesCategory =
+          currentCategory === "All" ||
+          product.category === currentCategory;
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+
+      });
 
 
-  const existing =
-    cart.find(
-      item => item.id === id
-    );
+    list.innerHTML = "";
 
 
-  if(existing){
+    if (filtered.length === 0) {
 
-    existing.quantity += 1;
+      list.innerHTML = `
+        <div class="empty">
+          No products found.
+        </div>
+      `;
 
-  }else{
+      return;
 
-    cart.push({
+    }
 
-      id:product.id,
 
-      name:product.name,
+    filtered.forEach(product => {
 
-      category:product.category,
+      const card =
+        document.createElement("div");
 
-      unit:product.unit,
+      card.className =
+        "product-card";
 
-      price:product.price,
 
-      quantity:1
+      const price =
+        product.price ||
+        product.amount ||
+        0;
+
+
+      const unit =
+        product.unit ||
+        product.quantity ||
+        product.size ||
+        "";
+
+
+      card.innerHTML = `
+
+        <div class="product-image">
+          ${getProductImage(product)}
+        </div>
+
+        <div class="product-info">
+
+          <div class="product-name">
+            ${product.name || "Unnamed product"}
+          </div>
+
+          <div class="product-category">
+            ${product.category || ""}
+          </div>
+
+          <div class="product-price">
+            ${formatMoney(price)}
+          </div>
+
+          ${
+            unit
+              ? `
+                <div class="product-unit">
+                  ${unit}
+                </div>
+              `
+              : ""
+          }
+
+          <button
+            class="add-btn"
+            onclick='addToCart(${JSON.stringify(product).replace(/'/g, "&apos;")})'
+          >
+            Add to Basket
+          </button>
+
+        </div>
+      `;
+
+
+      list.appendChild(card);
 
     });
 
   }
 
 
-  saveCart();
+  /* =========================================
+     ADD TO CART
+     ========================================= */
 
-  updateCartCount();
+  function addToCart(product) {
 
-  showToast(
-    product.name +
-    " added to basket"
-  );
-
-}
-
-
-function changeQuantity(id,change){
-
-  const item =
-    cart.find(
-      product => product.id === id
-    );
-
-  if(!item) return;
-
-
-  item.quantity += change;
-
-
-  if(item.quantity <= 0){
-
-    cart =
-      cart.filter(
-        product => product.id !== id
+    const existing =
+      cart.find(
+        item =>
+          String(item.id) ===
+          String(product.id)
       );
 
-  }
+
+    if (existing) {
+
+      existing.quantity =
+        Number(existing.quantity || 0) + 1;
+
+    } else {
+
+      cart.push({
+
+        id: product.id,
+
+        name: product.name,
+
+        price:
+          Number(
+            product.price ||
+            product.amount ||
+            0
+          ),
+
+        unit:
+          product.unit ||
+          product.quantity ||
+          product.size ||
+          "",
+
+        quantity: 1
+
+      });
+
+    }
 
 
-  saveCart();
+    saveCart();
 
-  updateCartCount();
-
-  renderBasket();
-
-}
-
-
-function removeFromCart(id){
-
-  cart =
-    cart.filter(
-      product => product.id !== id
+    showToast(
+      product.name +
+      " added to basket"
     );
-
-  saveCart();
-
-  updateCartCount();
-
-  renderBasket();
-
-  showToast("Item removed");
-
-}
-
-
-function updateCartCount(){
-
-  const count =
-    cart.reduce(
-      (total,item) =>
-        total + item.quantity,
-      0
-    );
-
-  document.getElementById("cartCount")
-    .textContent = count;
-
-}
-
-
-function getCartTotal(){
-
-  return cart.reduce(
-
-    (total,item) =>
-      total +
-      item.price *
-      item.quantity,
-
-    0
-
-  );
-
-}
-
-
-function renderBasket(){
-
-  const container =
-    document.getElementById(
-      "basketItems"
-    );
-
-
-  const total =
-    getCartTotal();
-
-
-  document.getElementById(
-    "basketTotal"
-  ).textContent =
-    formatMoney(total);
-
-
-  document.getElementById(
-    "checkoutTotal"
-  ).textContent =
-    formatMoney(total);
-
-
-  if(cart.length === 0){
-
-    container.innerHTML = `
-      <div class="empty">
-        Your basket is empty.
-        <br><br>
-        Go to Home and add something.
-      </div>
-    `;
-
-    return;
 
   }
 
 
-  container.innerHTML = "";
+  /* =========================================
+     RENDER BASKET
+     ========================================= */
+
+  function renderBasket() {
+
+    const basket =
+      document.getElementById(
+        "basketList"
+      );
+
+    const totalBox =
+      document.getElementById(
+        "basketTotal"
+      );
 
 
-  cart.forEach(item => {
+    if (cart.length === 0) {
 
-    const row =
-      document.createElement("div");
-
-    row.className = "cart-item";
-
-
-    row.innerHTML = `
-
-      <div class="cart-item-info">
-
-        <div class="cart-item-name">
-          ${item.name}
+      basket.innerHTML = `
+        <div class="empty">
+          Your basket is empty.
         </div>
+      `;
 
-        <div class="cart-item-unit">
-          ${item.unit}
-        </div>
+      totalBox.innerHTML = "";
 
-        <div style="margin-top:5px;">
-          ${formatMoney(item.price)}
-        </div>
+      return;
 
-        <div class="qty-controls">
-
-          <button
-            type="button"
-            onclick="changeQuantity(${item.id},-1)"
-          >
-            −
-          </button>
-
-          <strong>
-            ${item.quantity}
-          </strong>
-
-          <button
-            type="button"
-            onclick="changeQuantity(${item.id},1)"
-          >
-            +
-          </button>
-
-          <button
-            class="remove-btn"
-            type="button"
-            onclick="removeFromCart(${item.id})"
-          >
-            ×
-          </button>
-
-        </div>
-
-      </div>
-
-      <strong>
-        ${formatMoney(
-          item.price *
-          item.quantity
-        )}
-      </strong>
-
-    `;
+    }
 
 
-    container.appendChild(row);
+    basket.innerHTML = "";
 
-  });
 
-}
+    let total = 0;
 
-function placeOrder(){
 
-  if(cart.length === 0){
-    showToast("Your basket is empty");
-    return;
-  }
-
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const area = document.getElementById("deliveryArea").value;
-  const payment = document.getElementById("paymentMethod").value;
-
-  if(!name || !phone || !address || !area){
-    showToast("Please complete all customer details");
-    return;
-  }
-
-  let total = 0;
-
-  let message =
-`🛒 *NEW MIRAJAM MARKET ORDER*
-
-👤 Customer: ${name}
-📞 Phone: ${phone}
-📍 Address: ${address}
-🏙️ Area: ${area}
-
-🛍️ *ORDER ITEMS:*
-`;
-
-  cart.forEach(item => {
-
-    const product = products.find(
-      p => p.id === item.id
-    );
-
-    if(product){
+    cart.forEach((item, index) => {
 
       const itemTotal =
-        product.price * item.quantity;
+        Number(item.price || 0) *
+        Number(item.quantity || 0);
 
       total += itemTotal;
 
-      message +=
-`\n• ${product.name}
-  ${product.unit} × ${item.quantity}
-  ₦${itemTotal.toLocaleString("en-NG")}
-`;
-    }
-  });
 
-  message +=
-`
-💰 *ESTIMATED TOTAL:* ₦${total.toLocaleString("en-NG")}
+      const div =
+        document.createElement("div");
 
-💳 Payment: ${payment}
+      div.className =
+        "cart-item";
 
-⚠️ Market prices may change.
-Please confirm the final price.
-`;
 
-  const order = {
-    id: Date.now(),
-    customerName: name,
-    customerPhone: phone,
-    address: address,
-    area: area,
-    paymentMethod: payment,
-    items: cart,
-    total: total,
-    status: "Pending",
-    date: new Date().toLocaleString("en-NG")
-  };
+      div.innerHTML = `
 
-  orders.push(order);
+        <div class="cart-item-info">
 
-  localStorage.setItem(
-    "mirajamOrders",
-    JSON.stringify(orders)
-  );
+          <div class="cart-item-name">
+            ${item.name}
+          </div>
 
-  /*
-    MIRAJAM WHATSAPP NUMBER
-    08126641363
-  */
+          <div class="cart-item-price">
+            ${formatMoney(item.price)}
+          </div>
 
-  const whatsappNumber = "2348126641363";
+          ${
+            item.unit
+              ? `<small>${item.unit}</small>`
+              : ""
+          }
 
-  const whatsappURL =
-    "https://wa.me/" +
-    whatsappNumber +
-    "?text=" +
-    encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
-
-  cart = [];
-
-  saveCart();
-
-  updateCartCount();
-
-  renderBasket();
-
-  renderOrders();
-
-  showToast("Order ready for WhatsApp");
-
-  setTimeout(() => {
-    showPage("orders");
-  }, 1000);
-
-}
-
-
-function renderOrders(){
-
-  const container =
-    document.getElementById(
-      "ordersList"
-    );
-
-
-  if(orders.length === 0){
-
-    container.innerHTML = `
-      <div class="empty">
-        You have not placed any orders yet.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML = "";
-
-
-  orders.forEach(order => {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "order-card";
-
-
-    let itemText = "";
-
-
-    order.items.forEach(item => {
-
-      itemText += `
-
-        <div style="margin-top:6px;">
-
-          ${item.quantity} ×
-          ${item.name}
-          (${item.unit})
-
-        </div>
-
-      `;
-
-    });
-
-
-    card.innerHTML = `
-
-      <strong>
-        Order #${order.id}
-      </strong>
-
-      <div
-        style="
-          font-size:12px;
-          color:#777;
-          margin-top:5px;
-        "
-      >
-        ${order.date}
-      </div>
-
-      <div class="order-status">
-        ${order.status}
-      </div>
-
-      <div style="margin-top:10px;">
-        ${itemText}
-      </div>
-
-      <div
-        style="
-          margin-top:10px;
-          font-weight:bold;
-          color:#075e35;
-        "
-      >
-        Total:
-        ${formatMoney(order.total)}
-      </div>
-
-    `;
-
-
-    container.appendChild(card);
-
-  });
-
-}
-
-
-function showPage(page){
-
-  const pages = [
-
-    "homePage",
-    "basketPage",
-    "checkoutPage",
-    "ordersPage",
-    "accountPage"
-
-  ];
-
-
-  pages.forEach(id => {
-
-    document
-      .getElementById(id)
-      .classList
-      .add("hidden");
-
-  });
-
-
-  const selected =
-    document.getElementById(
-      page + "Page"
-    );
-
-
-  if(selected){
-
-    selected
-      .classList
-      .remove("hidden");
-
-  }
-
-
-  const navs = [
-
-    "homeNav",
-    "searchNav",
-    "basketNav",
-    "ordersNav",
-    "accountNav"
-
-  ];
-
-
-  navs.forEach(id => {
-
-    document
-      .getElementById(id)
-      .classList
-      .remove("active");
-
-  });
-
-
-  const nav =
-    document.getElementById(
-      page + "Nav"
-    );
-
-
-  if(nav){
-
-    nav
-      .classList
-      .add("active");
-
-  }
-
-
-  if(page === "basket"){
-
-    renderBasket();
-
-  }
-
-
-  if(page === "checkout"){
-
-    document.getElementById(
-      "checkoutTotal"
-    ).textContent =
-      formatMoney(
-        getCartTotal()
-      );
-
-  }
-
-
-  if(page === "orders"){
-
-    renderOrders();
-
-  }
-
-
-  window.scrollTo({
-
-    top:0,
-
-    behavior:"smooth"
-
-  });
-
-}
-
-
-function focusSearch(){
-
-  showPage("home");
-
-
-  setTimeout(function(){
-
-    const input =
-      document.getElementById(
-        "searchInput"
-      );
-
-
-    input.focus();
-
-
-    input.scrollIntoView({
-
-      behavior:"smooth",
-
-      block:"center"
-
-    });
-
-  },100);
-
-}
-
-
-/* START APP */
-
-getCategories();
-
-displayProducts();
-
-updateCartCount();
-
-renderBasket();
-
-renderOrders();
-
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js")
-      .then(() => console.log("MIRAJAM Market app ready"))
-      .catch(error => console.log("Service Worker error:", error));
-  });
-}
-  async function loadProductsFromSupabase() {
-  console.log("Loading MIRAJAM products from Supabase...");
-
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("available", true)
-    .order("id", { ascending: true });
-
-  if (error) {
-    console.error("Supabase products error:", error);
-    return;
-  }
-
-  console.log("Supabase products loaded:", data.length);
-
-  if (data && data.length > 0) {
-    products.length = 0;
-    data.forEach(product => {
-      products.push(product);
-    });
-
-    getCategories();
-    displayProducts();
-    updateCartCount();
-    renderBasket();
-  }
-}
-
-loadProductsFromSupabase();
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></scrlconst SUPABASE_URL = "https://zqvvtsvzlpcupasdyiju.supabase.co";
-const SUPABASE_KEY = "sb_publishable_nLyErKt0ppCTZ-qcCeVRkA_adSD1kMj";
-</script>
-</body>
-</html>
+          <div class="quanti
