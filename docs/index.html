@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MIRAJAM Market</title>
+
+  <meta name="theme-color" content="#075e35">
+  <meta name="description" content="MIRAJAM Market - The physical market in a digital world.">
+
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f6f8;
+      color: #222;
+      padding-bottom: 75px;
+    }
+
+    header {
+      background: #075e35;
+      color: white;
+      padding: 20px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    header h1 {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    .container {
+      padding: 15px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .search-box {
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+      background: white;
+    }
+
+    .categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 5px;
+    }
+
+    .category-btn {
+      border: none;
+      background: white;
+      padding: 9px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid #ddd;
+    }
+
+    .category-btn.active {
+      background: #075e35;
+      color: white;
+      border-color: #075e35;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+
+    .product-image {
+      width: 100%;
